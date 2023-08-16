@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Three-Step Dependent Dropdown Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h1>Three-Step Dependent Dropdown Example</h1>
+
+    <label for="country">Select Country:</label>
+    <select id="country" name="country">
+      <option value="">Select a country</option>
+      <option value="bd">Bangladesh</option>
+      <option value="india">India</option>
+      <option value="pak">Pakistan</option>
+      <option value="chaina">China</option>
+    </select>
+
+    <label for="state">Select State:</label>
+    <select id="state" name="state" disabled>
+      <option value="">Select a state</option>
+    </select>
+
+    <label for="city">Select City:</label>
+    <select id="city" name="city" disabled>
+      <option value="">Select a city</option>
+    </select>
+
+    <script>
+      $(document).ready(function () {
+        // Define the data for countries, states, and cities
+        var data = {
+          bd: {
+            Dhaka: [
+              "Gazipur",
+              "Dhaka North",
+              "Dhaka South",
+              "Tangle",
+              "Manikganj",
+            ],
+            Mymensingh: [
+              "Muktagacha",
+              "Mymensingh Sadar",
+              "Fullbaria",
+              "Fulpur",
+              "Goforgaw",
+            ],
+          },
+          india: {
+            andhraPradesh: [
+              "Hyderabad",
+              "Visakhapatnam",
+              "Vijayawada",
+              "Guntur",
+              "Nellore",
+            ],
+            arunachalPradesh: ["Itanagar", "Naharlagun"],
+            assam: ["Guwahati", "Dibrugarh", "Silchar", "Jorhat", "Nagaon"],
+            bihar: ["Patna", "Gaya", "Bhagalpur", "Muzaffarpur", "Purnia"],
+            chhattisgarh: ["Raipur", "Bhilai", "Bilaspur", "Korba", "Durg"],
+            goa: ["Panaji", "Margao", "Vasco da Gama"],
+            gujarat: [
+              "Ahmedabad",
+              "Surat",
+              "Vadodara",
+              "Rajkot",
+              "Gandhinagar",
+            ],
+            haryana: ["Chandigarh", "Faridabad", "Gurugram", "Hisar", "Rohtak"],
+            himachalPradesh: ["Shimla", "Mandi", "Dharamshala", "Solan", "Una"],
+          },
+
+          canada: {
+            ontario: ["Toronto", "Ottawa"],
+            quebec: ["Montreal", "Quebec City"],
+          },
+        };
+
+        // Populate state dropdown based on selected country
+        $("#country").change(function () {
+          var selectedCountry = $(this).val();
+          if (selectedCountry !== "") {
+            $("#state").prop("disabled", false);
+            $("#state").html("<option value=''>Select a state</option>");
+
+            $.each(data[selectedCountry], function (state, cities) {
+              $("#state").append(
+                "<option value='" + state + "'>" + state + "</option>"
+              );
+            });
+          } else {
+            $("#state").prop("disabled", true);
+            $("#city").prop("disabled", true);
+            $("#state").html("<option value=''>Select a state</option>");
+            $("#city").html("<option value=''>Select a city</option>");
+          }
+        });
+
+        // Populate city dropdown based on selected state
+        $("#state").change(function () {
+          var selectedCountry = $("#country").val();
+          var selectedState = $(this).val();
+          if (selectedState !== "") {
+            $("#city").prop("disabled", false);
+            $("#city").html("<option value=''>Select a city</option>");
+
+            $.each(
+              data[selectedCountry][selectedState],
+              function (index, city) {
+                $("#city").append(
+                  "<option value='" + city + "'>" + city + "</option>"
+                );
+              }
+            );
+          } else {
+            $("#city").prop("disabled", true);
+            $("#city").html("<option value=''>Select a city</option>");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
